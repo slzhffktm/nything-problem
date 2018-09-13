@@ -26,7 +26,7 @@ class Queen(Piece):
         # left-up
         j = self.y
         for i in range(self.x-1, -1, -1):
-            if j + 1 < 0:
+            if j + 1 > 7:
                 break
             else:
                 j = j + 1
@@ -48,7 +48,7 @@ class Queen(Piece):
         # right-down
         j = self.y
         for i in range(self.x+1, 8):
-            if j - 1 < 0:
+            if j - 1 > 7:
                 break
             else:
                 j = j - 1
