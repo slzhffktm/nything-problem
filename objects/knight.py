@@ -1,8 +1,8 @@
 from piece import Piece
 
 class Knight(Piece):
-    def __init__(self,_x,_y):
-        Piece.__init__(self,_x,_y)
+    def __init__(self,_x,_y,color):
+        Piece.__init__(self,_x,_y,color)
 
     def attack(self, board):
         conflicts = 0
