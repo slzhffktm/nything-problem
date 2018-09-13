@@ -1,8 +1,8 @@
-from piece import Piece
+from .piece import Piece
 
 class Rook(Piece):
-    def __init__(self, x, y):
-        Piece.__init__(self, x,y)
+    def __init__(self, x, y, color):
+        Piece.__init__(self, x, y, color)
 
     def attack(self, board):
         conflicts = 0
