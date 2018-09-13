@@ -1,11 +1,13 @@
+from rook import Rook
+
 class Board:
     
     def check(self, i, j):
-        if (i == 8 and j == 8) or (i == 6 and j == 4):
+        if (i == 5 and j == 3) or (i == 5 and j == 4):
             return True
         return False
 
 board = Board()
-# bishop = Bishop(5, 5)
+bishop = Rook(5, 5)
 
-# print(bishop.attack(board))
+print(bishop.attack(board))
