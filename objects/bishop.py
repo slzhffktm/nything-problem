@@ -3,8 +3,8 @@ from piece import Piece
 class Bishop(Piece):
 
     # constructor
-    def __init__(self, x, y):        
-        Piece.__init__(self, x, y)
+    def __init__(self, x, y, color):        
+        Piece.__init__(self, x, y, color)
 
 
     # return how many pieces can be attacked by bishop
