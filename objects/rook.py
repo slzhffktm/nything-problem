@@ -2,36 +2,40 @@ from piece import Piece
 
 class Rook(Piece):
     def __init__(self, x, y):
-        super.__init__(x,y)
+        Piece.__init__(self, x,y)
 
     def attack(self, board):
         conflicts = 0
-        northwest = true
-        southwest = true
-        southeast = true
-        northeast = true
+        north = True
+        south = True
+        west = True
+        east = True
         for i in range (1,7):
-            if (northwest and (self.x + i <= 7) and (self.y + i <= 7)):
-                if (board.check(self.x + i, self.y + i)):
+            if (north and (self.y + i <= 7)):
+                if (board.check(self.x, self.y + i)):
                     conflicts += 1
+                    north = False
             else:
-                northwest = false
+                north = False
+
+            if (south and (self.y - i >= 0)):
+                if (board.check(self.x, self.y - i)):
+                    conflicts += 1
+                    south = False
+            else:
+                south = False
+
+            if (west and (self.x + i <= 7)):
+                if (board.check(self.x + i, self.y)):
+                    conflicts += 1
+                    west = False
+            else:
+                west = False
             
-            if (southwest and (self.x + i <= 7) and (self.y - i <= 7)):
-                if (board.check(self.x + i, self.y + i)):
+            if (east and (self.x - i >= 0)):
+                if (board.check(self.x - i, self.y)):
                     conflicts += 1
+                    east = False
             else:
-                southwest = false
-            
-            if (southeast and (self.x - i <= 7) and (self.y - i <= 7)):
-                if (board.check(self.x + i, self.y + i)):
-                    conflicts += 1
-            else:
-                southeast = false
-            
-            if (northeast and (self.x - i <= 7) and (self.y + i <= 7)):
-                if (board.check(self.x + i, self.y + i)):
-                    conflicts += 1
-            else:
-                northeast = false
+                east = False
         return conflicts
