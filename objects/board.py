@@ -106,42 +106,4 @@ class Board:
                     self.maps[i][j] = '.'
         return mapsTemp
 
-    def hillClimbing(self):
-        tempPieces = self.pieces[:]
-        while(True):
-            # countMove counts move that happen on each iteration
-            countMove = 0
-            for piece in self.pieces:
-                # delete piece from tempPieces list
-                tempPieces.remove(piece)
-                # get pieceChar from maps
-                pieceChar = self.maps[piece.y][piece.x]
-                # delete piece from maps
-                self.maps[piece.y][piece.x] = '.'
-                tempPiece = copy.deepcopy(piece)
-                # create heat map
-                heatMap = self.countHeatMap(tempPiece,pieceChar,tempPieces)
-                # get minimum value
-                minValue = heatMap.min()
-                minIdx = []
-                # find minimum index
-                for i in range(8):
-                    for j in range(8):
-                        if(heatMap[i][j] == minValue):
-                            minIdx.append((j,i))
-                if not((piece.x, piece.y) in minIdx):
-                    # choice index from list of minimum index
-                    newIdx = rnd.choice(minIdx)
-                    # place piece on minimum index
-                    piece.x = newIdx[0]
-                    piece.y = newIdx[1]
-                    countMove += 1
-                self.maps[piece.y][piece.x] = pieceChar
-                tempPieces = self.pieces[:]
-                # self.show()
-            if(countMove == 0):
-                # in one iteration, nothing change happen
-                break
-        print("Hill Climbing")
-        print("Solution:")
-        self.show()
+    
