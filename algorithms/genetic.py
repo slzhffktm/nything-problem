@@ -1,4 +1,5 @@
 import random as rnd
+from objects.board import Board
 
 global knightPossibleMoves = 8
 global queenPossibleMoves = 8
@@ -17,18 +18,18 @@ def countFitnessFunction(board):
 
 def selection(board, side):
     idxSelection = rnd.randint(1,6)
-    selectionBoard = []
-    selection
+    selectionBoard = Board()
     if(side == 'left'):
         for piece in board.pieces:
             if piece.x <= idxSelection:
-                selectionPieces.append(piece)
-            else:
-
+                selectionBoard.pieces.append(piece)
+                selectionBoard.maps[piece.y][piece.x]
     elif(side == 'right'):
          for piece in board.pieces:
             if piece.x > idxSelection:
-                selectionPieces.append(piece)
+                selectionBoard.pieces.append(piece)
+                selectionBoard.maps[piece.y][piece.x]
+    return board
             
 
 def crossOver():
