@@ -16,22 +16,33 @@ def countFitnessFunction(board):
     conflict = board.countConflictsSameColor()
     return maxFitnessFunction - conflict
 
-def selection(board, side):
-    idxSelection = rnd.randint(1,6)
-    selectionBoard = Board()
+def selection(pieces, side, idxSelection):
+    selectionPieces = []
     if(side == 'left'):
-        for piece in board.pieces:
-            if piece.x <= idxSelection:
-                selectionBoard.pieces.append(piece)
-                selectionBoard.maps[piece.y][piece.x]
+        for i in range(idxSelection):
+            selectionPieces.append(pieces[i])
     elif(side == 'right'):
-         for piece in board.pieces:
-            if piece.x > idxSelection:
-                selectionBoard.pieces.append(piece)
-                selectionBoard.maps[piece.y][piece.x]
-    return board
+        for i in range(idxSelection, len(pieces)):
+            selectionPieces.append(pieces[i])
+    return selectionBoard
             
 
-def crossOver():
+def crossOver(pieces1,pieces2):
+    idxSelection = rnd.randint(1, len(pieces1) - 1)
+    part1 = selection(pieces1, 'left', idxSelection)
+    part2 = selection(pieces2, 'right', idxSelection)
+    result = []
+    result.append(part1)
+    result.append(part2)
+    return result
 
-def mutation():
+def mutation(pieces, maps):
+    idxSelection = rnd.randint(0, len(pieces1))
+    newX = rnd.randint(0,7)
+    newY = rnd.randint(0,7)
+    while(self.maps[7 - newY][newX] != '.'):
+        newX = rnd.randint(0,7)
+        newY = rnd.randint(0,7)
+    newY = 7 - newY
+    pieces[idxSelection].x = newX
+    pieces[idxSelection].y = newY
