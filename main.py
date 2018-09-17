@@ -1,4 +1,6 @@
-import hill_climbing.py
-import simulated_annealing.py
-import genetic_algorithm.py
+from objects.board import Board
+
+b = Board()
+b.show()
+b.countConflicts()
 
