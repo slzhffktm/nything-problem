@@ -1,4 +1,5 @@
 from math import exp
+from copy import deepcopy
 import numpy
 from objects.board import Board
 
@@ -12,11 +13,11 @@ def SAAccept(e, ei, ti):
     if ei < e:
         # count probabilty
         probs = SAProbability(e, ei, ti)
-        print(probs)
+        
         return numpy.random.choice([False, True], p=[1-probs, probs])
 
-    # else (ei >= e)
-    return True
+    else: # (ei >= e)
+        return True
 
 
 """
@@ -28,10 +29,10 @@ function to decrease temperature for simulated annealing
         log: in %
 @return: final temperature
 """
-def SAdecreaseTemp(method, initial_temp, rate):
+def SADecreaseTemp(method, initial_temp, rate):
     if method == 1:
         return initial_temp - rate
-    elif method == 2':
+    else:
         return initial_temp*(100-rate)/100
 
 
@@ -42,11 +43,24 @@ function to do movement for piece in simulated annealing
 """
 def SAMove(board, piece):
     piece_char = board.maps[piece.y][piece.x]   # get char from maps
-    self.maps[piece.y][piece.x] = '.'   # delete piece from maps
+    board.maps[piece.y][piece.x] = '.'   # delete piece from maps
     move = numpy.random.choice([0, 1, 2, 3, 4])
     try:
-        if move == 1:
-            
+        if move == 1:       # move right
+            if not board.check(piece.x+1, piece.y):
+                piece.x = piece.x + 1
+        elif move == 2:     # move left
+            if not board.check(piece.x-1, piece.y):
+                piece.x = piece.x - 1
+        elif move == 3:     # move up
+            if not board.check(piece.x, piece.y+1):
+                piece.y = piece.y + 1
+        elif move == 4:     # move down
+            if not board.check(piece.x, piece.y-1):
+                piece.y = piece.y - 1
+    except:
+        pass
+    board.maps[piece.y][piece.x] = piece_char
 
 
 """
@@ -58,22 +72,50 @@ def simulatedAnnealing(board):
     print('Decreasing method:')
     print('1. linear')
     print('2. log')
-    method = input('Choose decreasing method (e.g. 1):')
+    method = int(input('Choose decreasing method (e.g. 1): '))
 
     # input initial temperature
-    print('Initial in degree (e.g. 1000):')
+    temperature = float(input('Initial in degree (e.g. 1000): '))
 
     # decreasing rate
     if method == 1:
-        print('Decreasing rate in degree (e.g. 0.1):')
+        rate = float(input('Decreasing rate in degree (e.g. 0.1): '))
     else: # method == 2
-        print('Decreasing rate in % (e.g. 0.1):')
+        rate = float(input('Decreasing rate in % (e.g. 0.1): '))
 
     # start loop for solving nything
+    attempt = 0     # count stucked attempt
+    min_conflict = deepcopy(board)
     while(True):
-        temp_board = board.copy()   # save current board
+        old_board = deepcopy(board)
 
         # move pieces
-        for piece in board.pieces:
-            
-            
+        for i in range(len(board.pieces)):
+            SAMove(board, board.pieces[i])
+
+        e = board.countConflictsSameColor(board.pieces)
+        ei = old_board.countConflictsSameColor(old_board.pieces)
+
+        accept = SAAccept(e, ei, temperature)
+        
+        if e < min_conflict.countConflictsSameColor(min_conflict.pieces):
+            min_conflict = deepcopy(board)
+
+        if not accept:
+            board = old_board
+            attempt += 1
+        else:
+            attempt = 0
+
+        if attempt == 5:
+            if min_conflict.countConflictsSameColor(min_conflict.pieces) < board.countConflictsSameColor(board.pieces):
+                board = min_conflict
+            break
+
+        # decrease temperature
+        temperature = SADecreaseTemp(method, temperature, rate)
+        
+        if temperature == 0:
+            break
+
+    board.show()

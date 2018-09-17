@@ -37,3 +37,10 @@ class Knight(Piece):
                     conflicts += 1
         
         return conflicts     
+
+
+    def getChar(self):
+        if self.color == 'w':
+            return 'K'
+        else:   # color == 'b'
+            return 'k'

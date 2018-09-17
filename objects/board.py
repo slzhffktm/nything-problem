@@ -7,13 +7,25 @@ import numpy as np
 import copy
 
 class Board:
-    # Class Attribute
-    maps = []
-    pieces = []
+
     # Initializer / Instance Attributes
     def __init__(self):
+        self.maps = []
         for i in range(8):
             self.maps.append(['.', '.', '.', '.', '.', '.', '.', '.'])
+        self.pieces = []
+        self.whiteRook = 0
+        self.whiteQueen = 0
+        self.whiteBishop = 0
+        self.whiteKnight = 0
+        self.blackQueen = 0
+        self.blackRook = 0
+        self.blackBishop = 0
+        self.blackKnight = 0
+        
+
+    # instance method
+    def readExternalFile(self):
         f = open("test.txt","r")
         inputPieces = f.read().split("\n")
         for data in inputPieces:
@@ -29,38 +41,45 @@ class Board:
                     if(data[1] == "KNIGHT"):
                         self.maps[y][x] = "K"
                         k = Knight(x,y,'w')
+                        self.whiteKnight += 1
                         self.pieces.append(k)
                     elif(data[1] == "BISHOP"):
                         self.maps[y][x] = "B"
                         b = Bishop(x,y,'w')
+                        self.whiteBishop += 1
                         self.pieces.append(b)
                     elif(data[1] == "ROOK"):
                         self.maps[y][x] = "R"
                         r = Rook(x,y,'w')
+                        self.whiteRook += 1
                         self.pieces.append(r)
                     elif(data[1] == "QUEEN"):
                         self.maps[y][x] = "Q"
                         q = Queen(x,y,'w')
+                        self.whiteQueen += 1
                         self.pieces.append(q)
                 elif(data[0] == "BLACK"):
                     if(data[1] == "KNIGHT"):
                         self.maps[y][x] = "k"
                         k = Knight(x,y,'b')
+                        self.blackKnight += 1
                         self.pieces.append(k)
                     elif(data[1] == "BISHOP"):
                         self.maps[y][x] = "b"
                         b = Bishop(x,y,'b')
+                        self.blackBishop += 1
                         self.pieces.append(b)
                     elif(data[1] == "ROOK"):
                         self.maps[y][x] = "r"
                         r = Rook(x,y,'b')
+                        self.blackRook += 1
                         self.pieces.append(r)
                     elif(data[1] == "QUEEN"):
                         self.maps[y][x] = "q"
                         q = Queen(x,y,'b')
+                        self.blackQueen += 1
                         self.pieces.append(q)
 
-    # instance method
     def show(self):
         for i in range(7,-1,-1):
             for j in range(8):
@@ -86,24 +105,18 @@ class Board:
         else:
             return False
 
-    def countHeatMap(self,piece, pieceChar,tempPieces):
-        mapsTemp =  np.zeros((8,8), dtype=np.int)
-        for i in range(8):
-            for j in range(8):
-                if self.maps[i][j] != ".":
-                    # dummy for imposible move
-                    mapsTemp[i][j] = 999
-                else:
-                    # insert pieceChart(Q,B,R,K) to maps
-                    self.maps[i][j] = pieceChar
-                    piece.x = j
-                    piece.y = i
-                    # insert new piece with new i and j to tempPieces
-                    tempPieces.append(piece)
-                    mapsTemp[i][j] = self.countConflictsSameColor(tempPieces)
-                    # remove again the new piece
-                    tempPieces.remove(piece)
-                    self.maps[i][j] = '.'
-        return mapsTemp
+    """
+    function to update Board using pieces
+    @pieces: pieces
+    """
+    def update(self, pieces):
+        self.pieces = pieces[:]
 
-    
+        # clear maps
+        self.maps = []
+        for i in range(8):
+            self.maps.append(['.', '.', '.', '.', '.', '.', '.', '.'])
+
+        # fill maps
+        for piece in self.pieces:
+            self.maps[piece.y][piece.x] = piece.getChar()
