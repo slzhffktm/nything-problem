@@ -9,6 +9,8 @@ class Board:
     # Initializer / Instance Attributes
     def __init__(self):
         self.maps = []
+        for i in range(8):
+            self.maps.append(['.', '.', '.', '.', '.', '.', '.', '.'])
         self.pieces = []
         self.whiteRook = 0
         self.whiteQueen = 0
@@ -18,8 +20,10 @@ class Board:
         self.blackRook = 0
         self.blackBishop = 0
         self.blackKnight = 0
-        for i in range(8):
-            self.maps.append(['.', '.', '.', '.', '.', '.', '.', '.'])
+        
+
+    # instance method
+    def readExternalFile(self):
         f = open("test.txt","r")
         inputPieces = f.read().split("\n")
         for data in inputPieces:
@@ -74,7 +78,6 @@ class Board:
                         self.blackQueen += 1
                         self.pieces.append(q)
 
-    # instance method
     def show(self):
         for i in range(7,-1,-1):
             for j in range(8):
