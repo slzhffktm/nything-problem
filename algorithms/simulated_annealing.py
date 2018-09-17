@@ -84,23 +84,39 @@ def simulatedAnnealing(board):
         rate = float(input('Decreasing rate in % (e.g. 0.1): '))
 
     # start loop for solving nything
+    attempt = 0     # count stucked attempt
+    min_conflict = deepcopy(board)
     while(True):
-        old_pieces = deepcopy(board.pieces)
-        old_maps = deepcopy(board.maps)
+        old_board = deepcopy(board)
 
         # move pieces
         for i in range(len(board.pieces)):
             SAMove(board, board.pieces[i])
+
+        print("old board")
+        old_board.show()
+        print("new board")
+        board.show()
         
         e = board.countConflictsSameColor(board.pieces)
-        print(e)
-        ei = board.countConflictsSameColor(old_pieces)
+        ei = board.countConflictsSameColor(old_board.pieces)
         print(ei)
+        print(e)
         accept = SAAccept(e, ei, temperature)
         
+        if e < min_conflict.countConflictsSameColor(min_conflict.pieces):
+            min_conflict = deepcopy(board)
+
         if not accept:
-            board.pieces = old_pieces
-            board.maps = old_maps
+            board = old_board
+            attempt += 1
+        else:
+            attempt = 0
+
+        if attempt == 5:
+            if min_conflict.countConflictsSameColor(min_conflict.pieces) < board.countConflictsSameColor(board.pieces):
+                board = min_conflict
+            break
 
         # decrease temperature
         temperature = SADecreaseTemp(method, temperature, rate)
