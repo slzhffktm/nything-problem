@@ -92,3 +92,9 @@ class Queen(Piece):
 
         return conflicts
 
+
+    def getChar(self):
+        if self.color == 'w':
+            return 'Q'
+        else:   # color == 'b'
+            return 'q'

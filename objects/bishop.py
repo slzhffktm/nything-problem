@@ -57,3 +57,8 @@ class Bishop(Piece):
 
         return attacked
 
+    def getChar(self):
+        if self.color == 'w':
+            return 'B'
+        else:   # color == 'b'
+            return 'b'

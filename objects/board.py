@@ -102,3 +102,20 @@ class Board:
             return True
         else:
             return False
+
+
+    """
+    function to update Board using pieces
+    @pieces: pieces
+    """
+    def update(self, pieces):
+        self.pieces = pieces[:]
+
+        # clear maps
+        self.maps = []
+        for i in range(8):
+            self.maps.append(['.', '.', '.', '.', '.', '.', '.', '.'])
+
+        # fill maps
+        for piece in self.pieces:
+            self.maps[piece.y][piece.x] = piece.getChar()
