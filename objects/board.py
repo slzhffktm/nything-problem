@@ -5,11 +5,19 @@ from .rook import Rook
 from .queen import Queen
 
 class Board:
-    # Class Attribute
-    maps = []
-    pieces = []
+
     # Initializer / Instance Attributes
     def __init__(self):
+        self.maps = []
+        self.pieces = []
+        self.whiteRook = 0
+        self.whiteQueen = 0
+        self.whiteBishop = 0
+        self.whiteKnight = 0
+        self.blackQueen = 0
+        self.blackRook = 0
+        self.blackBishop = 0
+        self.blackKnight = 0
         for i in range(8):
             self.maps.append(['.', '.', '.', '.', '.', '.', '.', '.'])
         f = open("test.txt","r")
@@ -27,35 +35,43 @@ class Board:
                     if(data[1] == "KNIGHT"):
                         self.maps[y][x] = "K"
                         k = Knight(x,y,'w')
+                        self.whiteKnight += 1
                         self.pieces.append(k)
                     elif(data[1] == "BISHOP"):
                         self.maps[y][x] = "B"
                         b = Bishop(x,y,'w')
+                        self.whiteBishop += 1
                         self.pieces.append(b)
                     elif(data[1] == "ROOK"):
                         self.maps[y][x] = "R"
                         r = Rook(x,y,'w')
+                        self.whiteRook += 1
                         self.pieces.append(r)
                     elif(data[1] == "QUEEN"):
                         self.maps[y][x] = "Q"
                         q = Queen(x,y,'w')
+                        self.whiteQueen += 1
                         self.pieces.append(q)
                 elif(data[0] == "BLACK"):
                     if(data[1] == "KNIGHT"):
                         self.maps[y][x] = "k"
                         k = Knight(x,y,'b')
+                        self.blackKnight += 1
                         self.pieces.append(k)
                     elif(data[1] == "BISHOP"):
                         self.maps[y][x] = "b"
                         b = Bishop(x,y,'b')
+                        self.blackBishop += 1
                         self.pieces.append(b)
                     elif(data[1] == "ROOK"):
                         self.maps[y][x] = "r"
                         r = Rook(x,y,'b')
+                        self.blackRook += 1
                         self.pieces.append(r)
                     elif(data[1] == "QUEEN"):
                         self.maps[y][x] = "q"
                         q = Queen(x,y,'b')
+                        self.blackQueen += 1
                         self.pieces.append(q)
 
     # instance method
