@@ -3,6 +3,8 @@ from .bishop import Bishop
 from .knight import Knight
 from .rook import Rook
 from .queen import Queen
+import numpy as np
+import copy
 
 class Board:
     # Class Attribute
@@ -83,3 +85,25 @@ class Board:
             return True
         else:
             return False
+
+    def countHeatMap(self,piece, pieceChar,tempPieces):
+        mapsTemp =  np.zeros((8,8), dtype=np.int)
+        for i in range(8):
+            for j in range(8):
+                if self.maps[i][j] != ".":
+                    # dummy for imposible move
+                    mapsTemp[i][j] = 999
+                else:
+                    # insert pieceChart(Q,B,R,K) to maps
+                    self.maps[i][j] = pieceChar
+                    piece.x = j
+                    piece.y = i
+                    # insert new piece with new i and j to tempPieces
+                    tempPieces.append(piece)
+                    mapsTemp[i][j] = self.countConflictsSameColor(tempPieces)
+                    # remove again the new piece
+                    tempPieces.remove(piece)
+                    self.maps[i][j] = '.'
+        return mapsTemp
+
+    
