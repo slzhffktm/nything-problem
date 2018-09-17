@@ -91,13 +91,17 @@ class Board:
         for i in range(8):
             for j in range(8):
                 if self.maps[i][j] != ".":
-                    mapsTemp[i][j] = 99
+                    # dummy for imposible move
+                    mapsTemp[i][j] = 999
                 else:
+                    # insert pieceChart(Q,B,R,K) to maps
                     self.maps[i][j] = pieceChar
                     piece.x = j
                     piece.y = i
+                    # insert new piece with new i and j to tempPieces
                     tempPieces.append(piece)
                     mapsTemp[i][j] = self.countConflictsSameColor(tempPieces)
+                    # remove again the new piece
                     tempPieces.remove(piece)
                     self.maps[i][j] = '.'
         return mapsTemp
@@ -105,25 +109,29 @@ class Board:
     def hillClimbing(self):
         tempPieces = self.pieces[:]
         while(True):
+            # countMove counts move that happen on each iteration
             countMove = 0
             for piece in self.pieces:
+                # delete piece from tempPieces list
                 tempPieces.remove(piece)
+                # get pieceChar from maps
                 pieceChar = self.maps[piece.y][piece.x]
+                # delete piece from maps
                 self.maps[piece.y][piece.x] = '.'
-                # print(piece.__class__.__name__)
-                # print(piece.x," ",piece.y)
                 tempPiece = copy.deepcopy(piece)
+                # create heat map
                 heatMap = self.countHeatMap(tempPiece,pieceChar,tempPieces)
+                # get minimum value
                 minValue = heatMap.min()
-                # find minimum index
                 minIdx = []
+                # find minimum index
                 for i in range(8):
                     for j in range(8):
                         if(heatMap[i][j] == minValue):
                             minIdx.append((j,i))
                 if not((piece.x, piece.y) in minIdx):
+                    # choice index from list of minimum index
                     newIdx = rnd.choice(minIdx)
-                    # print(newIdx)
                     # place piece on minimum index
                     piece.x = newIdx[0]
                     piece.y = newIdx[1]
@@ -132,6 +140,7 @@ class Board:
                 tempPieces = self.pieces[:]
                 # self.show()
             if(countMove == 0):
+                # in one iteration, nothing change happen
                 break
         print("Hill Climbing")
         print("Solution:")
