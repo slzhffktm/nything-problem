@@ -39,3 +39,10 @@ class Rook(Piece):
             else:
                 east = False
         return conflicts
+
+
+    def getChar(self):
+        if self.color == 'w':
+            return 'R'
+        else:   # color == 'b'
+            return 'r'
