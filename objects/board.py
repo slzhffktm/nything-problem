@@ -1,5 +1,4 @@
 import random as rnd
-from copy import deepcopy
 from .bishop import Bishop
 from .knight import Knight
 from .rook import Rook
@@ -110,7 +109,13 @@ class Board:
     @pieces: pieces
     """
     def update(self, pieces):
-        self.pieces = deepcopy(pieces)
+        self.pieces = pieces[:]
 
+        # clear maps
+        self.maps = []
+        for i in range(8):
+            self.maps.append(['.', '.', '.', '.', '.', '.', '.', '.'])
+
+        # fill maps
         for piece in self.pieces:
             self.maps[piece.y][piece.x] = piece.getChar()
