@@ -85,9 +85,9 @@ class Board:
             print()
         self.countConflicts()
 
-    def countConflictsSameColor(self):
+    def countConflictsSameColor(self, pieces):
         count = 0
-        for piece in self.pieces:
+        for piece in pieces:
             # print(piece.__class__.__name__, piece.x, piece.y, "att", piece.attack(self))
             count += piece.attack(self)
         return count
