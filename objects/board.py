@@ -1,4 +1,5 @@
 import random as rnd
+from copy import deepcopy
 from .bishop import Bishop
 from .knight import Knight
 from .rook import Rook
@@ -102,3 +103,14 @@ class Board:
             return True
         else:
             return False
+
+
+    """
+    function to update Board using pieces
+    @pieces: pieces
+    """
+    def update(self, pieces):
+        self.pieces = deepcopy(pieces)
+
+        for piece in self.pieces:
+            self.maps[piece.y][piece.x] = piece.getChar()
