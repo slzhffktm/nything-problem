@@ -25,10 +25,11 @@ def countHeatMap(board,piece, pieceChar,tempPieces):
 
 def hillClimbing(board):
         tempPieces = board.pieces[:]
-        isPieceMove = False
-        while(not isPieceMove):
+        isPieceMove = True
+        while(isPieceMove):
             # countMove counts move that happen on each iteration
             countMove = 0
+            piecesMovement = []
             for piece in board.pieces:
                 # delete piece from tempPieces list
                 tempPieces.remove(piece)
@@ -50,13 +51,22 @@ def hillClimbing(board):
                 if not((piece.x, piece.y) in minIdx):
                     # choice index from list of minimum index
                     newIdx = rnd.choice(minIdx)
-                    # place piece on minimum index
-                    piece.x = newIdx[0]
-                    piece.y = newIdx[1]
+                    # append minimum minimum value and index to be compared with other pieces
+                    piecesMovement.append([minValue,newIdx,piece])
                     isPieceMove = True
                 board.maps[piece.y][piece.x] = pieceChar
                 tempPieces = board.pieces[:]
-                # board.show()
+                
+            #choosing the best piece movement
+            if (piecesMovement != []):
+                piecesMovement.sort(key=lambda x:x[0])
+                piecePosition = piecesMovement[0][1]
+                pieceIndex = board.pieces.index(piecesMovement[0][2])
+                board.pieces[pieceIndex].x = piecePosition[0]
+                board.pieces[pieceIndex].y = piecePosition[1]
+                board.update(board.pieces)
+            else:
+                isPieceMove = False
         print("Hill Climbing")
         print("Solution:")
         board.show()

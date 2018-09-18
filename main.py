@@ -1,6 +1,8 @@
 from objects.board import Board
-from algorithms.hillClimbing import hillClimbing
+from algorithms.simulated_annealing import simulatedAnnealing
 
 b = Board()
+b.readExternalFile()
 b.show()
-hillClimbing(b)
+
+simulatedAnnealing(b)
