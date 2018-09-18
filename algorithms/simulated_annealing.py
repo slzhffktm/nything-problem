@@ -13,7 +13,7 @@ def SAAccept(e, ei, ti):
     if ei < e:
         # count probabilty
         probs = SAProbability(e, ei, ti)
-        print(probs)
+        
         return numpy.random.choice([False, True], p=[1-probs, probs])
 
     else: # (ei >= e)
@@ -93,15 +93,9 @@ def simulatedAnnealing(board):
         for i in range(len(board.pieces)):
             SAMove(board, board.pieces[i])
 
-        print("old board")
-        old_board.show()
-        print("new board")
-        board.show()
-        
         e = board.countConflictsSameColor(board.pieces)
-        ei = board.countConflictsSameColor(old_board.pieces)
-        print(ei)
-        print(e)
+        ei = old_board.countConflictsSameColor(old_board.pieces)
+
         accept = SAAccept(e, ei, temperature)
         
         if e < min_conflict.countConflictsSameColor(min_conflict.pieces):
@@ -120,7 +114,7 @@ def simulatedAnnealing(board):
 
         # decrease temperature
         temperature = SADecreaseTemp(method, temperature, rate)
-        print(temperature)
+        
         if temperature == 0:
             break
 
