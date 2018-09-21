@@ -1,23 +1,42 @@
 from math import exp
 from copy import deepcopy
 import numpy
-from objects.board import Board
+# from objects.board import Board
 
 # function that returns acceptance probability of simulated annealing
 def SAProbability(e, ei, ti):
     return exp(-(e-ei)/ti)
 
 
-# function that returns boolean:  acceptance of simulated annealing step
-def SAAccept(e, ei, ti):
-    if ei < e:
-        # count probabilty
-        probs = SAProbability(e, ei, ti)
-        
-        return numpy.random.choice([False, True], p=[1-probs, probs])
+"""
+function that returns boolean:  acceptance of simulated annealing step
+@board: new board that has been moved
+@old_board: board before moved
+@ti: temperature
+"""
+def SAAccept(board, old_board, ti):
+    # count conflicts
+    new_conf_same_color, new_conf_diff_color = board.countConflicts(board.pieces)
+    old_conf_same_color, old_conf_diff_color = old_board.countConflicts(old_board.pieces)
 
-    else: # (ei >= e)
-        return True
+    delta_same_color = old_conf_same_color - new_conf_same_color
+    delta_diff_color = new_conf_diff_color - old_conf_diff_color
+
+    if delta_same_color > delta_diff_color:
+        if old_conf_same_color < new_conf_same_color:
+            # count probability
+            probs = SAProbability(new_conf_same_color, old_conf_same_color, ti)
+        else:
+            return True
+
+    else:
+        if old_conf_diff_color > new_conf_diff_color:
+            # count probability
+            probs = SAProbability(old_conf_diff_color, new_conf_diff_color, ti)
+        else:
+            return True
+        
+    return numpy.random.choice([False, True], p=[1-probs, probs])
 
 
 """
@@ -47,16 +66,16 @@ def SAMove(board, piece):
     move = numpy.random.choice([0, 1, 2, 3, 4])
     try:
         if move == 1:       # move right
-            if not board.check(piece.x+1, piece.y):
+            if not board.check(piece.x+1, piece.y, 'w') and not board.check(piece.x+1, piece.y, 'b'):
                 piece.x = piece.x + 1
         elif move == 2:     # move left
-            if not board.check(piece.x-1, piece.y):
+            if not board.check(piece.x-1, piece.y, 'w') and not board.check(piece.x-1, piece.y, 'b'):
                 piece.x = piece.x - 1
         elif move == 3:     # move up
-            if not board.check(piece.x, piece.y+1):
+            if not board.check(piece.x, piece.y+1, 'w') and not board.check(piece.x, piece.y+1, 'b'):
                 piece.y = piece.y + 1
         elif move == 4:     # move down
-            if not board.check(piece.x, piece.y-1):
+            if not board.check(piece.x, piece.y-1, 'w') and not board.check(piece.x, piece.y-1, 'b'):
                 piece.y = piece.y - 1
     except:
         pass
@@ -85,7 +104,7 @@ def simulatedAnnealing(board):
 
     # start loop for solving nything
     attempt = 0     # count stucked attempt
-    min_conflict = deepcopy(board)
+    best_conf = deepcopy(board)
     while(True):
         old_board = deepcopy(board)
 
@@ -93,28 +112,31 @@ def simulatedAnnealing(board):
         for i in range(len(board.pieces)):
             SAMove(board, board.pieces[i])
 
-        e = board.countConflictsSameColor(board.pieces)
-        ei = old_board.countConflictsSameColor(old_board.pieces)
+        accept = SAAccept(board, old_board, temperature)
 
-        accept = SAAccept(e, ei, temperature)
-        
-        if e < min_conflict.countConflictsSameColor(min_conflict.pieces):
-            min_conflict = deepcopy(board)
+        # save best board        
+        new_conf_same_color, new_conf_diff_color = board.countConflicts(board.pieces)
+        best_conf_same_color, best_conf_diff_color = best_conf.countConflicts(best_conf.pieces)
+
+        if new_conf_diff_color-new_conf_same_color > best_conf_diff_color-best_conf_same_color:
+            best_conf = deepcopy(board)
 
         if not accept:
+            print("naruto")
             board = old_board
             attempt += 1
         else:
             attempt = 0
 
-        if attempt == 5:
-            if min_conflict.countConflictsSameColor(min_conflict.pieces) < board.countConflictsSameColor(board.pieces):
-                board = min_conflict
+        if attempt == 10:
+            board = best_conf
             break
 
         # decrease temperature
         temperature = SADecreaseTemp(method, temperature, rate)
         
+        print(temperature)
+
         if temperature == 0:
             break
 
