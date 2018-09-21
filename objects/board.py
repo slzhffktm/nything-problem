@@ -94,9 +94,15 @@ class Board:
             count += piece.attack(self)
         return count
     
+    
+
     def countConflicts(self):
-        sameColor = self.countConflictsSameColor(self.pieces)
+        sameColor = 0
         difColor = 0
+        for piece in pieces:
+            sameTemp,difTemp = piece.attack(self)
+            sameColor += sameTemp
+            difColor += difTemp
         print(sameColor," ",difColor)
     
     def check(self, j, i, attackColor):
