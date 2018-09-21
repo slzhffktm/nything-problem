@@ -99,7 +99,7 @@ class Board:
     def countConflicts(self):
         sameColor = 0
         difColor = 0
-        for piece in pieces:
+        for piece in self.pieces:
             sameTemp,difTemp = piece.attack(self)
             sameColor += sameTemp
             difColor += difTemp
