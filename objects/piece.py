@@ -7,7 +7,8 @@ class Piece:
 
     """
     count attackable pieces using current piece
-    @return: int
+    @return1: friendly attack
+    @return2: enemy attack
     """
     def attack(self, board):
         pass
