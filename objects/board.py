@@ -3,6 +3,8 @@ from .bishop import Bishop
 from .knight import Knight
 from .rook import Rook
 from .queen import Queen
+import numpy as np
+import copy
 
 class Board:
 
@@ -92,17 +94,23 @@ class Board:
             count += piece.attack(self)
         return count
     
+    
+
     def countConflicts(self):
-        sameColor = self.countConflictsSameColor(self.pieces)
+        sameColor = 0
         difColor = 0
+        for piece in self.pieces:
+            sameTemp,difTemp = piece.attack(self)
+            sameColor += sameTemp
+            difColor += difTemp
         print(sameColor," ",difColor)
     
-    def check(self, j, i):
+    def check(self, j, i, attackColor):
+        
         if(self.maps[i][j] != "."):
-            return True
-        else:
-            return False
-
+            if((attackColor == 'w' and self.maps[i][j].isupper()) or (attackColor == 'b' and self.maps[i][j].islower())):
+                return True
+        return False
 
     """
     function to update Board using pieces
