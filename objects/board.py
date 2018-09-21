@@ -85,9 +85,9 @@ class Board:
             for j in range(8):
                 print(self.maps[i][j], end = " ")
             print()
-        self.countConflicts()
+        self.printConflicts()
 
-    def countConflictsSameColor(self, pieces):
+    def countConflicts(self, pieces):
         sameColor = 0
         difColor = 0
         for piece in pieces:
@@ -98,8 +98,8 @@ class Board:
     
     
 
-    def countConflicts(self):
-        sameColor,difColor = self.countConflictsSameColor(self.pieces)  
+    def printConflicts(self):
+        sameColor,difColor = self.countConflicts(self.pieces)  
         print(sameColor," ",difColor)
     
     def check(self, j, i, attackColor):
