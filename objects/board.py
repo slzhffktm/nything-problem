@@ -99,11 +99,12 @@ class Board:
         difColor = 0
         print(sameColor," ",difColor)
     
-    def check(self, j, i):
+    def check(self, j, i, attackColor):
+        
         if(self.maps[i][j] != "."):
-            return True
-        else:
-            return False
+            if((attackColor == 'w' and self.maps[i][j].isupper()) or (attackColor == 'b' and self.maps[i][j].islower())):
+                return True
+        return False
 
     """
     function to update Board using pieces
