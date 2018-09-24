@@ -1,6 +1,5 @@
 import random as rnd
 import copy as cpy
-from objects.board import Board
 
 
 def maxFitnessFunction(board):
@@ -11,8 +10,8 @@ def maxFitnessFunction(board):
     return (board.whiteKnight + board.blackKnight) * knightPossibleMoves + (board.whiteQueen + board.blackQueen) * queenPossibleMoves + (board.whiteBishop + board.blackBishop) * bishopPossibleMoves + (board.whiteRook + board.blackRook) * rookPossibleMoves
 
 def countFitnessFunction(board, pieces):
-    conflict = board.countConflictsSameColor(pieces)
-    return maxFitnessFunction(board) - conflict
+    sameColorConflicts, diffColorConflicts = board.countConflicts(pieces)
+    return maxFitnessFunction(board) - sameColorConflicts + diffColorConflicts
 
 def selection(pieces, side, idxSelection):
     selectionPieces = []
