@@ -122,7 +122,6 @@ def simulatedAnnealing(board):
             best_conf = deepcopy(board)
 
         if not accept:
-            print("naruto")
             board = old_board
             attempt += 1
         else:
@@ -134,10 +133,9 @@ def simulatedAnnealing(board):
 
         # decrease temperature
         temperature = SADecreaseTemp(method, temperature, rate)
-        
-        print(temperature)
-
-        if temperature == 0:
+    
+        if temperature <= 0:
+            board = best_conf
             break
 
     board.show()
