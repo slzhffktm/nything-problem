@@ -38,10 +38,9 @@ def selection(pieces, side, idxSelection):
     return selectionPieces
             
 """
-function that return a list
-@pieces: List of pieces
-@side: left or right
-@idxSelection: the index number in which the list will be trimmed
+function that return a list which was the result of cross-over between two individual
+@pieces1: first individual
+@pieces2: second individual
 """
 def crossOver(pieces1,pieces2):
     idxSelection = rnd.randint(1, len(pieces1) - 1)
@@ -100,7 +99,8 @@ function to solve nything-problem using simulated annealing
 @board: Board
 """
 def genetic(board):
-    nPopulation = 100
+    nPopulation = int(input("Number of population (e.g. 100): "))
+    iteration = int(input("Number of iteration (e.g. 100): "))
     population = []
     for i in range (nPopulation):
         temp = cpy.deepcopy(randAllPiece(board.pieces, board.maps))
@@ -112,7 +112,7 @@ def genetic(board):
             cleanPopulation.append(individual)
     cleanPopulation.sort(key=lambda x:x[1], reverse=True)
     nCleanPopulation = len(cleanPopulation)
-    for j in range(1000):
+    for j in range(iteration):
         if(cleanPopulation[0][1] != maxFitnessFunction(board)):
             for i in range(len(cleanPopulation)-1):
                 if (i+1 < len(cleanPopulation)):
