@@ -1,8 +1,8 @@
 from objects.board import Board
-from algorithms.simulated_annealing import simulatedAnnealing
+from algorithms.genetic import genetic
 
 b = Board()
 b.readExternalFile()
 b.show()
 
-simulatedAnnealing(b)
+genetic(b)
